@@ -7,6 +7,7 @@ import { errorHandler } from "./middleware/error-handler.js";
 import { usersRouter } from "./routes/users.js";
 import { registerRouter } from "./routes/register.js";
 import { loginRouter } from "./routes/login.js";
+import { categoriesRouter } from "./routes/categories.js";
 
 dotenv.config();
 
@@ -37,6 +38,7 @@ app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 app.use("/", usersRouter);
 app.use("/", registerRouter);
 app.use("/", loginRouter);
+app.use("/", categoriesRouter);
 
 app.use(errorHandler);
 
