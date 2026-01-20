@@ -3,7 +3,7 @@ import { pool } from "../database.js";
 import { ResultSetHeader } from "mysql2";
 import { Category } from "../types/categories.js";
 import { Article } from "../types/articles.js";
-import { validateCategoryId } from "../middleware/validation.ts/category-id.js";
+import { validateId } from "../middleware/validation.ts/validate-id.js";
 import {
   validatePartialCategoryData,
   validateRequiredCategoryData,
@@ -29,31 +29,35 @@ router.get("/categories", async (req, res, next) => {
 
 // GET /categories/:id
 
-router.get("/categories/:id", validateCategoryId, async (req, res, next) => {
-  try {
-    const categoryId = Number(req.params.id);
-    const [rows] = await pool.execute(
-      "SELECT id, name, description FROM categories WHERE id = ?",
-      [categoryId],
-    );
+router.get(
+  "/categories/:id",
+  validateId("Category ID"),
+  async (req, res, next) => {
+    try {
+      const categoryId = Number(req.params.id);
+      const [rows] = await pool.execute(
+        "SELECT id, name, description FROM categories WHERE id = ?",
+        [categoryId],
+      );
 
-    const categories = rows as Category[];
+      const categories = rows as Category[];
 
-    if (categories.length === 0) {
-      return next({ status: 404, message: "Category not found" });
+      if (categories.length === 0) {
+        return next({ status: 404, message: "Category not found" });
+      }
+
+      res.json(categories[0]);
+    } catch (error) {
+      next(error);
     }
-
-    res.json(categories[0]);
-  } catch (error) {
-    next(error);
-  }
-});
+  },
+);
 
 // GET /categories/:id/articles
 
 router.get(
   "/categories/:id/articles",
-  validateCategoryId,
+  validateId("Category ID"),
   async (req, res, next) => {
     try {
       const categoryId = Number(req.params.id);
@@ -107,7 +111,7 @@ router.post(
 router.put(
   "/categories/:id",
   authenticateToken,
-  validateCategoryId,
+  validateId("Category ID"),
   validateRequiredCategoryData,
   async (req, res, next) => {
     try {
@@ -134,7 +138,7 @@ router.put(
 router.patch(
   "/categories/:id",
   authenticateToken,
-  validateCategoryId,
+  validateId("Category ID"),
   validatePartialCategoryData,
   async (req, res, next) => {
     try {
@@ -185,7 +189,7 @@ router.patch(
 router.delete(
   "/categories/:id",
   authenticateToken,
-  validateCategoryId,
+  validateId("Category ID"),
   async (req, res, next) => {
     try {
       const categoryId = Number(req.params.id);

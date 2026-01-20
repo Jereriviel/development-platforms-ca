@@ -6,7 +6,7 @@ import {
   validateRequiredUserData,
   validatePartialUserData,
 } from "../middleware/validation.ts/user-data.js";
-import { validateUserId } from "../middleware/validation.ts/user-id.js";
+import { validateId } from "../middleware/validation.ts/validate-id.js";
 import { authenticateToken } from "../middleware/validation.ts/auth.js";
 
 const router = Router();
@@ -25,7 +25,7 @@ router.get("/users", async (req, res, next) => {
 
 //GET /users/:id
 
-router.get("/users/:id", validateUserId, async (req, res, next) => {
+router.get("/users/:id", validateId("User ID"), async (req, res, next) => {
   try {
     const userId = Number(req.params.id);
 
@@ -48,12 +48,15 @@ router.get("/users/:id", validateUserId, async (req, res, next) => {
 
 //GET /users/:id/comments
 
-router.get("/users/:id/comments", validateUserId, async (req, res, next) => {
-  try {
-    const userId = Number(req.params.id);
+router.get(
+  "/users/:id/comments",
+  validateId("User ID"),
+  async (req, res, next) => {
+    try {
+      const userId = Number(req.params.id);
 
-    const [rows] = await pool.execute(
-      `
+      const [rows] = await pool.execute(
+        `
       SELECT 
         id,
         content,
@@ -62,23 +65,27 @@ router.get("/users/:id/comments", validateUserId, async (req, res, next) => {
       FROM comments
       WHERE user_id = ?
       `,
-      [userId],
-    );
+        [userId],
+      );
 
-    res.json(rows);
-  } catch (error) {
-    next(error);
-  }
-});
+      res.json(rows);
+    } catch (error) {
+      next(error);
+    }
+  },
+);
 
 //GET /users/:id/articles
 
-router.get("/users/:id/articles", validateUserId, async (req, res, next) => {
-  try {
-    const userId = Number(req.params.id);
+router.get(
+  "/users/:id/articles",
+  validateId("User ID"),
+  async (req, res, next) => {
+    try {
+      const userId = Number(req.params.id);
 
-    const [rows] = await pool.execute(
-      `
+      const [rows] = await pool.execute(
+        `
       SELECT 
         id,
         title,
@@ -88,20 +95,21 @@ router.get("/users/:id/articles", validateUserId, async (req, res, next) => {
       FROM articles
       WHERE user_id = ?
       `,
-      [userId],
-    );
+        [userId],
+      );
 
-    res.json(rows);
-  } catch (error) {
-    next(error);
-  }
-});
+      res.json(rows);
+    } catch (error) {
+      next(error);
+    }
+  },
+);
 
 //PUT /users/:id
 
 router.put(
   "/users/:id",
-  validateUserId,
+  validateId("User ID"),
   validateRequiredUserData,
   authenticateToken,
   async (req, res, next) => {
@@ -136,7 +144,7 @@ router.put(
 
 router.patch(
   "/users/:id",
-  validateUserId,
+  validateId("User ID"),
   validatePartialUserData,
   authenticateToken,
   async (req, res, next) => {
@@ -191,7 +199,7 @@ router.patch(
 
 router.delete(
   "/users/:id",
-  validateUserId,
+  validateId("User ID"),
   authenticateToken,
   async (req, res, next) => {
     try {
