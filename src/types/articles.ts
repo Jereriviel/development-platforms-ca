@@ -3,5 +3,11 @@ export interface Article {
   title: string;
   body: string;
   category_id: number;
-  user_id: number;
+  submitter_id: number;
+  created_at: string;
+}
+
+export interface ArticleWithNames extends Article {
+  category_name: string;
+  submitter_name: string;
 }
