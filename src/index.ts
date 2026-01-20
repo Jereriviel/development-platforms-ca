@@ -4,6 +4,7 @@ import dotenv from "dotenv";
 import swaggerUi from "swagger-ui-express";
 import swaggerJSDoc from "swagger-jsdoc";
 import { errorHandler } from "./middleware/error-handler.js";
+import { usersRouter } from "./routes/users.js";
 
 dotenv.config();
 
@@ -31,9 +32,7 @@ app.use(cors());
 
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
-app.get("/", (req, res) => {
-  res.json({ message: "hello world!" });
-});
+app.use("/", usersRouter);
 
 app.use(errorHandler);
 
