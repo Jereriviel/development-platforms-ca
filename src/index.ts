@@ -14,9 +14,10 @@ const swaggerOptions = {
   definition: {
     openapi: "3.0.0",
     info: {
-      title: "Development Platforms CA API",
+      title: "Development Platforms Corse Assignment API",
       version: "1.0.0",
-      description: "API for managing users and news articles.",
+      description:
+        "API for managing news articles, categories, comments and users.",
     },
     servers: [{ url: `http://localhost:${PORT}` }],
   },
