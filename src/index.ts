@@ -8,6 +8,7 @@ import { usersRouter } from "./routes/users.js";
 import { registerRouter } from "./routes/register.js";
 import { loginRouter } from "./routes/login.js";
 import { categoriesRouter } from "./routes/categories.js";
+import { articlesRouter } from "./routes/articles.js";
 
 dotenv.config();
 
@@ -39,6 +40,7 @@ app.use("/", usersRouter);
 app.use("/", registerRouter);
 app.use("/", loginRouter);
 app.use("/", categoriesRouter);
+app.use("/", articlesRouter);
 
 app.use(errorHandler);
 
