@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { validate } from "./validate.js";
+import { validateData } from "./validate-data.js";
 
 // Required Category data
 
@@ -15,7 +15,7 @@ const requiredCategoryDataSchema = z.object({
     .max(500, "Description must not exceed 500 characters"),
 });
 
-export const validateRequiredCategoryData = validate(
+export const validateRequiredCategoryData = validateData(
   requiredCategoryDataSchema,
 );
 
@@ -35,4 +35,6 @@ const partialCategoryDataSchema = z.object({
     .optional(),
 });
 
-export const validatePartialCategoryData = validate(partialCategoryDataSchema);
+export const validatePartialCategoryData = validateData(
+  partialCategoryDataSchema,
+);

@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { validate } from "./validate.js";
+import { validateData } from "./validate-data.js";
 
 // Required Comment data
 
@@ -15,7 +15,9 @@ const requiredCommentDataSchema = z.object({
     .positive("Article ID must be a positive number"),
 });
 
-export const validateRequiredCommentData = validate(requiredCommentDataSchema);
+export const validateRequiredCommentData = validateData(
+  requiredCommentDataSchema,
+);
 
 // Partial Comment data
 
@@ -33,4 +35,6 @@ const partialCommentDataSchema = z.object({
     .optional(),
 });
 
-export const validatePartialCommentData = validate(partialCommentDataSchema);
+export const validatePartialCommentData = validateData(
+  partialCommentDataSchema,
+);

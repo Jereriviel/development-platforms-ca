@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { validate } from "./validate.js";
+import { validateData } from "./validate-data.js";
 
 // Required Article data
 
@@ -19,6 +19,10 @@ const requiredArticleDataSchema = z.object({
     .int("Category ID must be an integer")
     .positive("Category ID must be a positive number"),
 });
+
+export const validateRequiredArticleData = validateData(
+  requiredArticleDataSchema,
+);
 
 // Partial Article data
 
@@ -42,4 +46,6 @@ const partialArticleDataSchema = z.object({
     .optional(),
 });
 
-export const validatePartialArticleData = partialArticleDataSchema;
+export const validatePartialArticleData = validateData(
+  partialArticleDataSchema,
+);

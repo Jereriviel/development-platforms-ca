@@ -1,7 +1,7 @@
 import { z } from "zod";
-import { Request, Response, NextFunction } from "express";
+import { validateData } from "./validate-data.js";
 
-//Required user data
+//Required User data
 
 const requiredUserDataSchema = z.object({
   username: z
@@ -11,24 +11,9 @@ const requiredUserDataSchema = z.object({
   email: z.email("Email must be a valid email"),
 });
 
-export const validateRequiredUserData = (
-  req: Request,
-  res: Response,
-  next: NextFunction,
-) => {
-  const result = requiredUserDataSchema.safeParse(req.body);
+export const validateRequiredUserData = validateData(requiredUserDataSchema);
 
-  if (!result.success) {
-    return res.status(400).json({
-      error: "Validation failed",
-      details: result.error.issues.map((issue) => issue.message),
-    });
-  }
-
-  next();
-};
-
-//Partial user data
+//Partial User data
 
 const partialUserDataSchema = z.object({
   username: z
@@ -39,19 +24,4 @@ const partialUserDataSchema = z.object({
   email: z.email("Email must be a valid email").optional(),
 });
 
-export const validatePartialUserData = (
-  req: Request,
-  res: Response,
-  next: NextFunction,
-) => {
-  const result = partialUserDataSchema.safeParse(req.body);
-
-  if (!result.success) {
-    return res.status(400).json({
-      error: "Validation failed",
-      details: result.error.issues.map((issue) => issue.message),
-    });
-  }
-
-  next();
-};
+export const validatePartialUserData = validateData(partialUserDataSchema);
