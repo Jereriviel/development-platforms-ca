@@ -5,6 +5,7 @@ import swaggerUi from "swagger-ui-express";
 import swaggerJSDoc from "swagger-jsdoc";
 import { errorHandler } from "./middleware/error-handler.js";
 import { usersRouter } from "./routes/users.js";
+import { registerRouter } from "./routes/register.js";
 
 dotenv.config();
 
@@ -33,6 +34,7 @@ app.use(cors());
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 app.use("/", usersRouter);
+app.use("/", registerRouter);
 
 app.use(errorHandler);
 
