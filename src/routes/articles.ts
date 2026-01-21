@@ -6,7 +6,7 @@ import { CommentWithName } from "../types/comments.js";
 import {
   validatePartialArticleData,
   validateRequiredArticleData,
-} from "../middleware/validation.ts/article-data.js";
+} from "../middleware/validation.ts/validate-article-data.js";
 import { validateId } from "../middleware/validation.ts/validate-id.js";
 import { authenticateToken } from "../middleware/auth.js";
 
@@ -18,6 +18,8 @@ const router = Router();
  *   get:
  *     summary: Get all articles
  *     description: Returns a list of all articles including their category and submitter information.
+ *     tags:
+ *       - Articles
  *     responses:
  *       200:
  *         description: Array of articles
@@ -86,6 +88,8 @@ router.get("/articles", async (req, res, next) => {
  *   get:
  *     summary: Get a single article by ID
  *     description: Returns the article identified by its ID, including category and submitter information.
+ *     tags:
+ *       - Articles
  *     parameters:
  *       - name: id
  *         in: path
@@ -157,6 +161,8 @@ router.get(
  *   get:
  *     summary: Get comments for an article
  *     description: Returns a list of all comments associated with the specified article ID.
+ *     tags:
+ *       - Articles
  *     parameters:
  *       - name: id
  *         in: path
@@ -217,6 +223,8 @@ router.get(
  *   post:
  *     summary: Create a new article
  *     description: Creates a new article submitted by the authenticated user.
+ *     tags:
+ *       - Articles
  *     security:
  *       - bearerAuth: []
  *     requestBody:
@@ -300,6 +308,8 @@ router.post(
  *   put:
  *     summary: Update an article
  *     description: Replaces the article with the specified ID with new title, body, and category values. Only the authenticated submitter can delete.
+ *     tags:
+ *       - Articles
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -400,6 +410,8 @@ router.put(
  *   patch:
  *     summary: Partially update an article
  *     description: Updates one or more fields of the article identified by ID. Only the authenticated submitter can update.
+ *     tags:
+ *       - Articles
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -520,6 +532,8 @@ router.patch(
  *   delete:
  *     summary: Delete an article
  *     description: Deletes the article with the specified ID. Only the authenticated submitter can delete.
+ *     tags:
+ *       - Articles
  *     security:
  *       - bearerAuth: []
  *     parameters:

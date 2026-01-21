@@ -17,6 +17,8 @@ const router = Router();
  *   get:
  *     summary: Get all comments
  *     description: Returns a list of all comments including the user who submitted each comment.
+ *     tags:
+ *       - Comments
  *     responses:
  *       200:
  *         description: Array of comments
@@ -79,6 +81,8 @@ router.get("/comments", async (req, res, next) => {
  *   get:
  *     summary: Get a single comment by ID
  *     description: Returns the comment identified by its ID, including the user who submitted it.
+ *     tags:
+ *       - Comments
  *     parameters:
  *       - name: id
  *         in: path
@@ -145,6 +149,8 @@ router.get(
  *   post:
  *     summary: Create a new comment
  *     description: Creates a new comment on an article. Requires authentication.
+ *     tags:
+ *       - Comments
  *     security:
  *       - bearerAuth: []
  *     requestBody:
@@ -225,6 +231,8 @@ router.post(
  *   put:
  *     summary: Update a comment
  *     description: Replaces the comment with the specified ID with new content and article_id. Requires authentication and ownership.
+ *     tags:
+ *       - Comments
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -318,6 +326,8 @@ router.put(
  *   patch:
  *     summary: Partially update a comment
  *     description: Updates one or more fields of the comment identified by ID. Requires authentication and ownership.
+ *     tags:
+ *       - Comments
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -431,6 +441,8 @@ router.patch(
  *   delete:
  *     summary: Delete a comment
  *     description: Deletes the comment with the specified ID. Requires authentication and ownership.
+ *     tags:
+ *       - Comments
  *     security:
  *       - bearerAuth: []
  *     parameters:

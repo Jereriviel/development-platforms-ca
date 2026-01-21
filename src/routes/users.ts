@@ -17,6 +17,8 @@ const router = Router();
  *   get:
  *     summary: Get all users
  *     description: Returns a list of all users with their ID, username, and email.
+ *     tags:
+ *       - Users
  *     responses:
  *       200:
  *         description: Array of users
@@ -60,6 +62,8 @@ router.get("/users", async (req, res, next) => {
  *   get:
  *     summary: Get a single user by ID
  *     description: Returns the user identified by the given ID.
+ *     tags:
+ *       - Users
  *     parameters:
  *       - name: id
  *         in: path
@@ -112,6 +116,8 @@ router.get("/users/:id", validateId("User ID"), async (req, res, next) => {
  *   get:
  *     summary: Get all comments by a user
  *     description: Returns all comments submitted by the specified user.
+ *     tags:
+ *       - Users
  *     parameters:
  *       - name: id
  *         in: path
@@ -168,6 +174,8 @@ router.get(
  *   get:
  *     summary: Get all articles by a user
  *     description: Returns all articles submitted by the specified user.
+ *     tags:
+ *       - Users
  *     parameters:
  *       - name: id
  *         in: path
@@ -225,6 +233,8 @@ router.get(
  *   put:
  *     summary: Update a user
  *     description: Replaces the user's username and email. Requires authentication and ownership.
+ *     tags:
+ *       - Users
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -307,6 +317,8 @@ router.put(
  *   patch:
  *     summary: Partially update a user
  *     description: Updates one or more fields (username or email) of the user. Requires authentication and ownership.
+ *     tags:
+ *       - Users
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -408,6 +420,8 @@ router.patch(
  *   delete:
  *     summary: Delete a user
  *     description: Deletes the user with the specified ID. Requires authentication and ownership.
+ *     tags:
+ *       - Users
  *     security:
  *       - bearerAuth: []
  *     parameters:

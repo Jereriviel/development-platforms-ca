@@ -18,6 +18,8 @@ const router = Router();
  *   get:
  *     summary: Get all categories
  *     description: Returns a list of all categories with their ID, name, and description.
+ *     tags:
+ *       - Categories
  *     responses:
  *       200:
  *         description: Array of categories
@@ -64,6 +66,8 @@ router.get("/categories", async (req, res, next) => {
  *   get:
  *     summary: Get a single category by ID
  *     description: Returns the category identified by its ID.
+ *     tags:
+ *       - Categories
  *     parameters:
  *       - name: id
  *         in: path
@@ -119,6 +123,8 @@ router.get(
  *   get:
  *     summary: Get all articles in a category
  *     description: Returns a list of articles associated with the specified category ID.
+ *     tags:
+ *       - Categories
  *     parameters:
  *       - name: id
  *         in: path
@@ -178,6 +184,8 @@ router.get(
  *   post:
  *     summary: Create a new category
  *     description: Creates a new category. Requires authentication.
+ *     tags:
+ *       - Categories
  *     security:
  *       - bearerAuth: []
  *     requestBody:
@@ -237,6 +245,8 @@ router.post(
  *   put:
  *     summary: Update a category
  *     description: Replaces the category with the specified ID with new name and description. Requires authentication.
+ *     tags:
+ *       - Categories
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -311,6 +321,8 @@ router.put(
  *   patch:
  *     summary: Partially update a category
  *     description: Updates one or more fields of the category identified by ID. Requires authentication.
+ *     tags:
+ *       - Categories
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -406,6 +418,8 @@ router.patch(
  *   delete:
  *     summary: Delete a category
  *     description: Deletes the category with the specified ID. Requires authentication.
+ *     tags:
+ *       - Categories
  *     security:
  *       - bearerAuth: []
  *     parameters:

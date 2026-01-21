@@ -13,6 +13,8 @@ const router = Router();
  *   post:
  *     summary: Register a new user
  *     description: Creates a new user account with a username, email, and password.
+ *     tags:
+ *       - Auth
  *     requestBody:
  *       required: true
  *       content:

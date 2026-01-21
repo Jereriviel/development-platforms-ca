@@ -26,7 +26,30 @@ const swaggerOptions = {
         "API for managing news articles, categories, comments and users.",
     },
     servers: [{ url: `http://localhost:${PORT}` }],
+    tags: [
+      {
+        name: "Articles",
+        description: "Operations related to articles",
+      },
+      {
+        name: "Categories",
+        description: "Operations related to categories",
+      },
+      {
+        name: "Comments",
+        description: "Operations related to comments",
+      },
+      {
+        name: "Users",
+        description: "Operations related to users",
+      },
+      {
+        name: "Auth",
+        description: "Authentication endpoints (login/register)",
+      },
+    ],
   },
+
   apis: ["./src/routes/*.ts"],
 };
 
