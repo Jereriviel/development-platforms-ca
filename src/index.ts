@@ -9,6 +9,7 @@ import { registerRouter } from "./routes/register.js";
 import { loginRouter } from "./routes/login.js";
 import { categoriesRouter } from "./routes/categories.js";
 import { articlesRouter } from "./routes/articles.js";
+import { commentsRouter } from "./routes/comments.js";
 
 dotenv.config();
 
@@ -36,11 +37,16 @@ app.use(cors());
 
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
+app.get("/", (req, res) => {
+  res.json({ message: "Hello and welcome to my News Platform API!" });
+});
+
 app.use("/", usersRouter);
 app.use("/", registerRouter);
 app.use("/", loginRouter);
 app.use("/", categoriesRouter);
 app.use("/", articlesRouter);
+app.use("/", commentsRouter);
 
 app.use(errorHandler);
 
