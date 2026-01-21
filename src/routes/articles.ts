@@ -12,7 +12,48 @@ import { authenticateToken } from "../middleware/validation.ts/auth.js";
 
 const router = Router();
 
-//GET /articles
+/**
+ * @swagger
+ * /articles:
+ *   get:
+ *     summary: Get all articles
+ *     description: Returns a list of all articles including their category and submitter information.
+ *     responses:
+ *       200:
+ *         description: Array of articles
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 type: object
+ *                 properties:
+ *                   id:
+ *                     type: number
+ *                   title:
+ *                     type: string
+ *                   body:
+ *                     type: string
+ *                   category_id:
+ *                     type: number
+ *                   category_name:
+ *                     type: string
+ *                   submitter_id:
+ *                     type: number
+ *                   submitter_name:
+ *                     type: string
+ *                   created_at:
+ *                     type: string
+ *       500:
+ *         description: Internal server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ */
 
 router.get("/articles", async (req, res, next) => {
   try {
@@ -39,7 +80,36 @@ router.get("/articles", async (req, res, next) => {
   }
 });
 
-//GET /articles/:id
+/**
+ * @swagger
+ * /articles/{id}:
+ *   get:
+ *     summary: Get a single article by ID
+ *     description: Returns the article identified by its ID, including category and submitter information.
+ *     parameters:
+ *       - name: id
+ *         in: path
+ *         required: true
+ *         description: The ID of the article to retrieve
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Article object
+ *       400:
+ *         description: Invalid article ID
+ *       404:
+ *         description: Article not found
+ *       500:
+ *         description: Internal server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ */
 
 router.get(
   "/articles/:id",
@@ -81,7 +151,34 @@ router.get(
   },
 );
 
-//GET /articles/:id/comments
+/**
+ * @swagger
+ * /articles/{id}/comments:
+ *   get:
+ *     summary: Get comments for an article
+ *     description: Returns a list of all comments associated with the specified article ID.
+ *     parameters:
+ *       - name: id
+ *         in: path
+ *         required: true
+ *         description: The ID of the article whose comments are being requested
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Array of comments
+ *       400:
+ *         description: Invalid article ID
+ *       500:
+ *         description: Internal server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ */
 
 router.get(
   "/articles/:id/comments",
@@ -114,7 +211,51 @@ router.get(
   },
 );
 
-//POST /articles
+/**
+ * @swagger
+ * /articles:
+ *   post:
+ *     summary: Create a new article
+ *     description: Creates a new article submitted by the authenticated user.
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - title
+ *               - body
+ *               - category_id
+ *             properties:
+ *               title:
+ *                 type: string
+ *                 description: The title of the article
+ *               body:
+ *                 type: string
+ *                 description: The content of the article
+ *               category_id:
+ *                 type: number
+ *                 description: The ID of the category the article belongs to
+ *     responses:
+ *       201:
+ *         description: Article created
+ *       401:
+ *         description: Missing or invalid access token
+ *       404:
+ *         description: Category not found
+ *       500:
+ *         description: Internal server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ */
 
 router.post(
   "/articles/",
@@ -153,7 +294,60 @@ router.post(
   },
 );
 
-//PUT /articles/:id
+/**
+ * @swagger
+ * /articles/{id}:
+ *   put:
+ *     summary: Update an article
+ *     description: Replaces the article with the specified ID with new title, body, and category values. Only the authenticated submitter can delete.
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - name: id
+ *         in: path
+ *         required: true
+ *         description: The ID of the article to update
+ *         schema:
+ *           type: string
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - title
+ *               - body
+ *               - category_id
+ *             properties:
+ *               title:
+ *                 type: string
+ *                 description: The new title of the article
+ *               body:
+ *                 type: string
+ *                 description: The new content of the article
+ *               category_id:
+ *                 type: number
+ *                 description: The new category ID
+ *     responses:
+ *       201:
+ *         description: Article updated
+ *       401:
+ *         description: Missing or invalid access token
+ *       403:
+ *         description: You can only edit your own articles
+ *       404:
+ *         description: Category not found
+ *       500:
+ *         description: Internal server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ */
 
 router.put(
   "/articles/:id",
@@ -200,7 +394,56 @@ router.put(
   },
 );
 
-//PATCH /articles/:id
+/**
+ * @swagger
+ * /articles/{id}:
+ *   patch:
+ *     summary: Partially update an article
+ *     description: Updates one or more fields of the article identified by ID. Only the authenticated submitter can update.
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - name: id
+ *         in: path
+ *         required: true
+ *         description: The ID of the article to update
+ *         schema:
+ *           type: string
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               title:
+ *                 type: string
+ *                 description: Optional new title
+ *               body:
+ *                 type: string
+ *                 description: Optional new content
+ *               category_id:
+ *                 type: number
+ *                 description: Optional new category ID
+ *     responses:
+ *       200:
+ *         description: Article updated
+ *       401:
+ *         description: Missing or invalid access token
+ *       403:
+ *         description: You can only edit your own articles
+ *       404:
+ *         description: Category not found
+ *       500:
+ *         description: Internal server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ */
 
 router.patch(
   "/articles/:id",
@@ -271,7 +514,38 @@ router.patch(
   },
 );
 
-//DELETE /articles/:id
+/**
+ * @swagger
+ * /articles/{id}:
+ *   delete:
+ *     summary: Delete an article
+ *     description: Deletes the article with the specified ID. Only the authenticated submitter can delete.
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - name: id
+ *         in: path
+ *         required: true
+ *         description: The ID of the article to delete
+ *         schema:
+ *           type: string
+ *     responses:
+ *       204:
+ *         description: Article deleted
+ *       401:
+ *         description: Missing or invalid access token
+ *       403:
+ *         description: You can only delete your own articles
+ *       500:
+ *         description: Internal server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ */
 
 router.delete(
   "/articles/:id",
