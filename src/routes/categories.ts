@@ -7,8 +7,8 @@ import { validateId } from "../middleware/validation.ts/validate-id.js";
 import {
   validatePartialCategoryData,
   validateRequiredCategoryData,
-} from "../middleware/validation.ts/category-data.js";
-import { authenticateToken } from "../middleware/validation.ts/auth.js";
+} from "../middleware/validation.ts/validate-category-data.js";
+import { authenticateToken } from "../middleware/auth.js";
 
 const router = Router();
 

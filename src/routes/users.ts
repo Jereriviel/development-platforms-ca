@@ -5,9 +5,9 @@ import { User } from "../types/users.js";
 import {
   validateRequiredUserData,
   validatePartialUserData,
-} from "../middleware/validation.ts/user-data.js";
+} from "../middleware/validation.ts/validate-user-data.js";
 import { validateId } from "../middleware/validation.ts/validate-id.js";
-import { authenticateToken } from "../middleware/validation.ts/auth.js";
+import { authenticateToken } from "../middleware/auth.js";
 
 const router = Router();
 

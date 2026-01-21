@@ -8,7 +8,7 @@ import {
   validateRequiredArticleData,
 } from "../middleware/validation.ts/article-data.js";
 import { validateId } from "../middleware/validation.ts/validate-id.js";
-import { authenticateToken } from "../middleware/validation.ts/auth.js";
+import { authenticateToken } from "../middleware/auth.js";
 
 const router = Router();
 

@@ -5,9 +5,9 @@ import { Comment, CommentWithName } from "../types/comments.js";
 import {
   validatePartialCommentData,
   validateRequiredCommentData,
-} from "../middleware/validation.ts/comment-data.js";
+} from "../middleware/validation.ts/validate-comment-data.js";
 import { validateId } from "../middleware/validation.ts/validate-id.js";
-import { authenticateToken } from "../middleware/validation.ts/auth.js";
+import { authenticateToken } from "../middleware/auth.js";
 
 const router = Router();
 

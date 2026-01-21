@@ -3,7 +3,7 @@ import bcrypt from "bcrypt";
 import { pool } from "../database.js";
 import { ResultSetHeader } from "mysql2";
 import { User, UserResponse } from "../types/users.js";
-import { validateRegistration } from "../middleware/validation.ts/auth.js";
+import { validateRegistration } from "../middleware/validation.ts/validate-auth.js";
 
 const router = Router();
 
