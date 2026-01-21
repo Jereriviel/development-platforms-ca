@@ -49,8 +49,8 @@ The goal of this project is to develop a functional news platform where users ca
 - Zod input validation
 - Dotenv for environment variables
 - CORS for cross-origin access
-- JSDocs
-- Swagger JSDocs
+- JSDocs for code documentation
+- Swagger for API documentation
 
 ## Installing
 
@@ -60,13 +60,13 @@ The goal of this project is to develop a functional news platform where users ca
 git clone https://github.com/Jereriviel/development-platforms-ca.git
 ```
 
-### 2. Install dependencies
+### 2. Install dependencies:
 
 ```bash
 npm install
 ```
 
-### 3. Create a .env file (see .env.example for reference)
+### 3. Create a .env file (see .env.example for reference):
 
 ```bash
 DB_HOST=localhost
@@ -77,7 +77,11 @@ PORT=3000
 JWT_SECRET=your_jwt_secret
 ```
 
-#### 4. Import the included SQL file ( news-platform-database.sql ) into MySQL Workbench.
+### 4. Import the included SQL file into MySQL Workbench:
+
+```bash
+ news-platform-database.sql
+```
 
 ### 5. Start the local dev server:
 
@@ -85,13 +89,14 @@ JWT_SECRET=your_jwt_secret
 npm run dev
 ```
 
-### 6. You can view API documentation for all endpoints at
+### 6. API documentation:
 
 ```bash
 http://localhost:3000/api-docs/
 ```
 
-### 7. You can test the endpoints using Postman or a similar API client.
+### 7. Testing:
+You can use Postman or a similar API client to test the endpoints.
 
 ## Motivation
 
