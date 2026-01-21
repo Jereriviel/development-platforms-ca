@@ -11,6 +11,45 @@ import { authenticateToken } from "../middleware/validation.ts/auth.js";
 
 const router = Router();
 
+/**
+ * @swagger
+ * /comments:
+ *   get:
+ *     summary: Get all comments
+ *     description: Returns a list of all comments including the user who submitted each comment.
+ *     responses:
+ *       200:
+ *         description: Array of comments
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 type: object
+ *                 properties:
+ *                   id:
+ *                     type: number
+ *                   content:
+ *                     type: string
+ *                   article_id:
+ *                     type: number
+ *                   user_id:
+ *                     type: number
+ *                   user_name:
+ *                     type: string
+ *                   created_at:
+ *                     type: string
+ *       500:
+ *         description: Internal server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ */
+
 router.get("/comments", async (req, res, next) => {
   try {
     const [rows] = await pool.execute(
@@ -33,6 +72,37 @@ router.get("/comments", async (req, res, next) => {
     next(error);
   }
 });
+
+/**
+ * @swagger
+ * /comments/{id}:
+ *   get:
+ *     summary: Get a single comment by ID
+ *     description: Returns the comment identified by its ID, including the user who submitted it.
+ *     parameters:
+ *       - name: id
+ *         in: path
+ *         required: true
+ *         description: The ID of the comment to retrieve
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Comment object
+ *       400:
+ *         description: Invalid comment ID
+ *       404:
+ *         description: Comment not found
+ *       500:
+ *         description: Internal server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ */
 
 router.get(
   "/comments/:id",
@@ -68,6 +138,48 @@ router.get(
     }
   },
 );
+
+/**
+ * @swagger
+ * /comments:
+ *   post:
+ *     summary: Create a new comment
+ *     description: Creates a new comment on an article. Requires authentication.
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - content
+ *               - article_id
+ *             properties:
+ *               content:
+ *                 type: string
+ *                 description: The content of the comment
+ *               article_id:
+ *                 type: number
+ *                 description: The ID of the article this comment belongs to
+ *     responses:
+ *       201:
+ *         description: Comment created
+ *       401:
+ *         description: Missing or invalid access token
+ *       404:
+ *         description: Article not found
+ *       500:
+ *         description: Internal server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ */
 
 router.post(
   "/comments",
@@ -106,6 +218,57 @@ router.post(
     }
   },
 );
+
+/**
+ * @swagger
+ * /comments/{id}:
+ *   put:
+ *     summary: Update a comment
+ *     description: Replaces the comment with the specified ID with new content and article_id. Requires authentication and ownership.
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - name: id
+ *         in: path
+ *         required: true
+ *         description: The ID of the comment to update
+ *         schema:
+ *           type: string
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - content
+ *               - article_id
+ *             properties:
+ *               content:
+ *                 type: string
+ *                 description: The new content of the comment
+ *               article_id:
+ *                 type: number
+ *                 description: The ID of the article this comment belongs to
+ *     responses:
+ *       201:
+ *         description: Comment updated
+ *       401:
+ *         description: Missing or invalid access token
+ *       403:
+ *         description: You can only edit your own comments
+ *       404:
+ *         description: Article not found
+ *       500:
+ *         description: Internal server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ */
 
 router.put(
   "/comments/:id",
@@ -148,6 +311,54 @@ router.put(
     }
   },
 );
+
+/**
+ * @swagger
+ * /comments/{id}:
+ *   patch:
+ *     summary: Partially update a comment
+ *     description: Updates one or more fields of the comment identified by ID. Requires authentication and ownership.
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - name: id
+ *         in: path
+ *         required: true
+ *         description: The ID of the comment to update
+ *         schema:
+ *           type: string
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               content:
+ *                 type: string
+ *                 description: Optional new content
+ *               article_id:
+ *                 type: number
+ *                 description: Optional new article ID
+ *     responses:
+ *       200:
+ *         description: Comment updated
+ *       401:
+ *         description: Missing or invalid access token
+ *       403:
+ *         description: You can only edit your own comments
+ *       404:
+ *         description: Article not found
+ *       500:
+ *         description: Internal server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ */
 
 router.patch(
   "/comments/:id",
@@ -213,6 +424,39 @@ router.patch(
     }
   },
 );
+
+/**
+ * @swagger
+ * /comments/{id}:
+ *   delete:
+ *     summary: Delete a comment
+ *     description: Deletes the comment with the specified ID. Requires authentication and ownership.
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - name: id
+ *         in: path
+ *         required: true
+ *         description: The ID of the comment to delete
+ *         schema:
+ *           type: string
+ *     responses:
+ *       204:
+ *         description: Comment deleted
+ *       401:
+ *         description: Missing or invalid access token
+ *       403:
+ *         description: You can only delete your own comments
+ *       500:
+ *         description: Internal server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ */
 
 router.delete(
   "/comments/:id",
