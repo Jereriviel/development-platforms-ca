@@ -20,7 +20,7 @@ const router = Router();
  *     summary: Get all articles
  *     description: >
  *       Returns a paginated list of news articles including category and submitter information.
- *       Results are ordered by article ID in ascending order.
+ *       Results are ordered by article ID in ascending order by default, but can be sorted by category or author.
  *     tags:
  *       - Articles
  *     parameters:
@@ -38,6 +38,12 @@ const router = Router();
  *           minimum: 1
  *           example: 10
  *         description: Number of articles per page (default is 10)
+ *       - in: query
+ *         name: sort
+ *         schema:
+ *           type: string
+ *           enum: [category, author]
+ *         description: Optional sorting for articles. Use "category" to sort by category name, or "author" to sort by submitter name.
  *     responses:
  *       200:
  *         description: Paginated list of articles
@@ -99,6 +105,7 @@ const router = Router();
 router.get("/articles", async (req, res, next) => {
   try {
     const { limit, offset } = getPagination(req);
+    const { sort } = req.query;
     const [rows] = await pool.execute(
       `
       SELECT 
@@ -119,7 +126,17 @@ router.get("/articles", async (req, res, next) => {
       [limit.toString(), offset.toString()],
     );
 
-    res.json(rows as ArticleWithNames[]);
+    let articles = rows as ArticleWithNames[];
+
+    if (sort === "category") {
+      articles.sort((a, b) => a.category_name.localeCompare(b.category_name));
+    } else if (sort === "author") {
+      articles.sort((a, b) => a.submitter_name.localeCompare(b.submitter_name));
+    }
+
+    articles = articles.slice(offset, offset + limit);
+
+    res.json(articles);
   } catch (error) {
     next(error);
   }
