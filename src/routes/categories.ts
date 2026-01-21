@@ -12,7 +12,38 @@ import { authenticateToken } from "../middleware/validation.ts/auth.js";
 
 const router = Router();
 
-// GET /categories
+/**
+ * @swagger
+ * /categories:
+ *   get:
+ *     summary: Get all categories
+ *     description: Returns a list of all categories with their ID, name, and description.
+ *     responses:
+ *       200:
+ *         description: Array of categories
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 type: object
+ *                 properties:
+ *                   id:
+ *                     type: number
+ *                   name:
+ *                     type: string
+ *                   description:
+ *                     type: string
+ *       500:
+ *         description: Internal server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ */
 
 router.get("/categories", async (req, res, next) => {
   try {
@@ -27,7 +58,36 @@ router.get("/categories", async (req, res, next) => {
   }
 });
 
-// GET /categories/:id
+/**
+ * @swagger
+ * /categories/{id}:
+ *   get:
+ *     summary: Get a single category by ID
+ *     description: Returns the category identified by its ID.
+ *     parameters:
+ *       - name: id
+ *         in: path
+ *         required: true
+ *         description: The ID of the category to retrieve
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Category object
+ *       400:
+ *         description: Invalid category ID
+ *       404:
+ *         description: Category not found
+ *       500:
+ *         description: Internal server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ */
 
 router.get(
   "/categories/:id",
@@ -53,7 +113,34 @@ router.get(
   },
 );
 
-// GET /categories/:id/articles
+/**
+ * @swagger
+ * /categories/{id}/articles:
+ *   get:
+ *     summary: Get all articles in a category
+ *     description: Returns a list of articles associated with the specified category ID.
+ *     parameters:
+ *       - name: id
+ *         in: path
+ *         required: true
+ *         description: The ID of the category
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Array of articles
+ *       400:
+ *         description: Invalid category ID
+ *       500:
+ *         description: Internal server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ */
 
 router.get(
   "/categories/:id/articles",
@@ -85,7 +172,45 @@ router.get(
   },
 );
 
-// POST /categories
+/**
+ * @swagger
+ * /categories:
+ *   post:
+ *     summary: Create a new category
+ *     description: Creates a new category. Requires authentication.
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - name
+ *               - description
+ *             properties:
+ *               name:
+ *                 type: string
+ *                 description: Name of the category
+ *               description:
+ *                 type: string
+ *                 description: Description of the category
+ *     responses:
+ *       201:
+ *         description: Category created
+ *       401:
+ *         description: Missing or invalid access token
+ *       500:
+ *         description: Internal server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ */
 
 router.post(
   "/categories",
@@ -106,7 +231,54 @@ router.post(
   },
 );
 
-// PUT /categories/:id
+/**
+ * @swagger
+ * /categories/{id}:
+ *   put:
+ *     summary: Update a category
+ *     description: Replaces the category with the specified ID with new name and description. Requires authentication.
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - name: id
+ *         in: path
+ *         required: true
+ *         description: The ID of the category to update
+ *         schema:
+ *           type: string
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - name
+ *               - description
+ *             properties:
+ *               name:
+ *                 type: string
+ *                 description: The new name of the category
+ *               description:
+ *                 type: string
+ *                 description: The new description of the category
+ *     responses:
+ *       200:
+ *         description: Category updated
+ *       401:
+ *         description: Missing or invalid access token
+ *       404:
+ *         description: Category not found
+ *       500:
+ *         description: Internal server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ */
 
 router.put(
   "/categories/:id",
@@ -133,7 +305,51 @@ router.put(
   },
 );
 
-// PATCH /categories/:id
+/**
+ * @swagger
+ * /categories/{id}:
+ *   patch:
+ *     summary: Partially update a category
+ *     description: Updates one or more fields of the category identified by ID. Requires authentication.
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - name: id
+ *         in: path
+ *         required: true
+ *         description: The ID of the category to update
+ *         schema:
+ *           type: string
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               name:
+ *                 type: string
+ *                 description: Optional new name
+ *               description:
+ *                 type: string
+ *                 description: Optional new description
+ *     responses:
+ *       200:
+ *         description: Category updated
+ *       401:
+ *         description: Missing or invalid access token
+ *       404:
+ *         description: Category not found
+ *       500:
+ *         description: Internal server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ */
 
 router.patch(
   "/categories/:id",
@@ -184,7 +400,38 @@ router.patch(
   },
 );
 
-// DELETE /categories/:id
+/**
+ * @swagger
+ * /categories/{id}:
+ *   delete:
+ *     summary: Delete a category
+ *     description: Deletes the category with the specified ID. Requires authentication.
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - name: id
+ *         in: path
+ *         required: true
+ *         description: The ID of the category to delete
+ *         schema:
+ *           type: string
+ *     responses:
+ *       204:
+ *         description: Category deleted
+ *       401:
+ *         description: Missing or invalid access token
+ *       404:
+ *         description: Category not found
+ *       500:
+ *         description: Internal server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ */
 
 router.delete(
   "/categories/:id",
