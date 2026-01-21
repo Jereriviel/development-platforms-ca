@@ -54,19 +54,19 @@ The goal of this project is to develop a functional news platform where users ca
 
 ## Installing
 
-1. Clone the repo:
+### 1. Clone the repo:
 
 ```bash
 git clone https://github.com/Jereriviel/development-platforms-ca.git
 ```
 
-2. Install dependencies
+### 2. Install dependencies
 
 ```bash
 npm install
 ```
 
-3. Create a .env file (see .env.example for reference)
+### 3. Create a .env file (see .env.example for reference)
 
 ```bash
 DB_HOST=localhost
@@ -77,21 +77,21 @@ PORT=3000
 JWT_SECRET=your_jwt_secret
 ```
 
-4. Import the included SQL file (news-platform-database.sql) into MySQL Workbench.
+#### 4. Import the included SQL file ( news-platform-database.sql ) into MySQL Workbench.
 
-5. Start the local dev server:
+### 5. Start the local dev server:
 
 ```bash
 npm run dev
 ```
 
-6. You can view API documentation for all endpoints at
+### 6. You can view API documentation for all endpoints at
 
 ```bash
 http://localhost:3000/api-docs/
 ```
 
-7. You can test the endpoints using Postman or a similar API client.
+### 7. You can test the endpoints using Postman or a similar API client.
 
 ## Motivation
 
