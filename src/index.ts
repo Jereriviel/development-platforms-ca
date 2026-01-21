@@ -1,4 +1,4 @@
-import express, { Request, Response, NextFunction } from "express";
+import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
 import swaggerUi from "swagger-ui-express";
@@ -20,7 +20,7 @@ const swaggerOptions = {
   definition: {
     openapi: "3.0.0",
     info: {
-      title: "Development Platforms Corse Assignment API",
+      title: "Development Platforms Course Assignment API",
       version: "1.0.0",
       description:
         "API for managing news articles, categories, comments and users.",
