@@ -2,7 +2,7 @@
 
 ## Description
 
-The goal of this project is to develop a functional news platform where users can browse and submit news articles with categories, and comments by implementing an Express.js REST API backend with authentication and database integration.
+The goal of this project is to develop a functional news platform where users can browse and submit news articles with categories and comments by implementing an Express.js REST API backend with authentication and database integration.
 
 ## Core Functionality
 
@@ -10,7 +10,7 @@ The goal of this project is to develop a functional news platform where users ca
 
 - Anyone can view the listings of categories, news articles, comments and users
 - List endpoints support pagination using page and limit query parameters (default: page=1, limit=10)
-- Articles can optionally be sorted using the sort query parameter: 'sort=category — sort by category' name and 'sort=author — sort by submitter name'
+- Articles can optionally be sorted using the sort query parameter: 'sort=category — sort by category name' and 'sort=author — sort by submitter name'
 
 ### User Authentication:
 
