@@ -1,4 +1,4 @@
-import { Router, Request, Response, NextFunction } from "express";
+import { Router } from "express";
 import { pool } from "../database.js";
 import { ResultSetHeader } from "mysql2";
 import { Category } from "../types/categories.js";
@@ -9,6 +9,7 @@ import {
   validateRequiredCategoryData,
 } from "../middleware/validation.ts/validate-category-data.js";
 import { authenticateToken } from "../middleware/auth.js";
+import { getPagination } from "../utils/pagination.js";
 
 const router = Router();
 
@@ -17,41 +18,70 @@ const router = Router();
  * /categories:
  *   get:
  *     summary: Get all categories
- *     description: Returns a list of all categories with their ID, name, and description.
+ *     description: >
+ *       Returns a paginated list of all categories.
+ *       Each category includes its ID, name, and optional description.
  *     tags:
  *       - Categories
+ *     parameters:
+ *       - in: query
+ *         name: page
+ *         schema:
+ *           type: integer
+ *           minimum: 1
+ *           example: 1
+ *         description: Page number for pagination (default is 1)
+ *       - in: query
+ *         name: limit
+ *         schema:
+ *           type: integer
+ *           minimum: 1
+ *           example: 10
+ *         description: Number of categories per page (default is 10)
  *     responses:
  *       200:
- *         description: Array of categories
+ *         description: Paginated list of categories
  *         content:
  *           application/json:
  *             schema:
  *               type: array
  *               items:
  *                 type: object
+ *                 required:
+ *                   - id
+ *                   - name
  *                 properties:
  *                   id:
- *                     type: number
+ *                     type: integer
+ *                     example: 1
  *                   name:
  *                     type: string
+ *                     example: Technology
  *                   description:
  *                     type: string
+ *                     example: News related to technology and innovation
  *       500:
  *         description: Internal server error
  *         content:
  *           application/json:
  *             schema:
  *               type: object
+ *               required:
+ *                 - error
  *               properties:
  *                 error:
  *                   type: string
+ *                   example: Internal server error
  */
 
 router.get("/categories", async (req, res, next) => {
   try {
+    const { limit, offset } = getPagination(req);
     const [rows] = await pool.execute(
-      "SELECT id, name, description FROM categories",
+      "SELECT id, name, description FROM categories ORDER BY id ASC LIMIT ? OFFSET ?",
+      [limit.toString(), offset.toString()],
     );
+
     const categories = rows as Category[];
 
     res.json(categories);

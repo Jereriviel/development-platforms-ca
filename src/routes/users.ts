@@ -8,6 +8,7 @@ import {
 } from "../middleware/validation.ts/validate-user-data.js";
 import { validateId } from "../middleware/validation.ts/validate-id.js";
 import { authenticateToken } from "../middleware/auth.js";
+import { getPagination } from "../utils/pagination.js";
 
 const router = Router();
 
@@ -16,9 +17,22 @@ const router = Router();
  * /users:
  *   get:
  *     summary: Get all users
- *     description: Returns a list of all users with their ID, username, and email.
+ *     description: Returns a paginated list of all users with their ID, username, and email.
  *     tags:
  *       - Users
+ *     parameters:
+ *       - name: page
+ *         in: query
+ *         required: false
+ *         description: Page number (default is 1)
+ *         schema:
+ *           type: integer
+ *       - name: limit
+ *         in: query
+ *         required: false
+ *         description: Number of users per page (default is 10)
+ *         schema:
+ *           type: integer
  *     responses:
  *       200:
  *         description: Array of users
@@ -48,9 +62,14 @@ const router = Router();
 
 router.get("/users", async (req, res, next) => {
   try {
-    const [rows] = await pool.execute("SELECT id, username, email FROM users");
+    const { limit, offset } = getPagination(req);
+    const [rows] = await pool.execute(
+      "SELECT id, username, email FROM users ORDER BY id ASC LIMIT ? OFFSET ?",
+      [limit.toString(), offset.toString()],
+    );
+    const users = rows as User[];
 
-    res.json(rows as User[]);
+    res.json(users);
   } catch (error) {
     next(error);
   }

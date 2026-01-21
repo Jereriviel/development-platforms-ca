@@ -1,4 +1,4 @@
-import { Router, Request, Response, NextFunction } from "express";
+import { Router } from "express";
 import bcrypt from "bcrypt";
 import { pool } from "../database.js";
 import { User, UserResponse } from "../types/users.js";

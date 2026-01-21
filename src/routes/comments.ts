@@ -1,4 +1,4 @@
-import { Router, Request, Response, NextFunction } from "express";
+import { Router } from "express";
 import { pool } from "../database.js";
 import { ResultSetHeader } from "mysql2";
 import { Comment, CommentWithName } from "../types/comments.js";
@@ -8,6 +8,7 @@ import {
 } from "../middleware/validation.ts/validate-comment-data.js";
 import { validateId } from "../middleware/validation.ts/validate-id.js";
 import { authenticateToken } from "../middleware/auth.js";
+import { getPagination } from "../utils/pagination.js";
 
 const router = Router();
 
@@ -16,9 +17,22 @@ const router = Router();
  * /comments:
  *   get:
  *     summary: Get all comments
- *     description: Returns a list of all comments including the user who submitted each comment.
+ *     description: Returns a paginated list of all comments including the user who submitted each comment.
  *     tags:
  *       - Comments
+ *     parameters:
+ *       - name: page
+ *         in: query
+ *         required: false
+ *         description: Page number (default is 1)
+ *         schema:
+ *           type: integer
+ *       - name: limit
+ *         in: query
+ *         required: false
+ *         description: Number of items per page (default is 10)
+ *         schema:
+ *           type: integer
  *     responses:
  *       200:
  *         description: Array of comments
@@ -54,6 +68,7 @@ const router = Router();
 
 router.get("/comments", async (req, res, next) => {
   try {
+    const { limit, offset } = getPagination(req);
     const [rows] = await pool.execute(
       `
       SELECT
@@ -65,8 +80,12 @@ router.get("/comments", async (req, res, next) => {
         comments.created_at
       FROM comments
       INNER JOIN users ON comments.user_id = users.id
+      ORDER BY comments.id ASC
+      LIMIT ? OFFSET ?
      `,
+      [limit.toString(), offset.toString()],
     );
+
     const comments = rows as CommentWithName[];
 
     res.json(comments);

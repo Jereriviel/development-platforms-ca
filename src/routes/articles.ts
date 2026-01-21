@@ -1,4 +1,4 @@
-import { Router, Request, Response, NextFunction } from "express";
+import { Router } from "express";
 import { pool } from "../database.js";
 import { ResultSetHeader } from "mysql2";
 import { Article, ArticleWithNames } from "../types/articles.js";
@@ -9,6 +9,7 @@ import {
 } from "../middleware/validation.ts/validate-article-data.js";
 import { validateId } from "../middleware/validation.ts/validate-id.js";
 import { authenticateToken } from "../middleware/auth.js";
+import { getPagination } from "../utils/pagination.js";
 
 const router = Router();
 
@@ -17,49 +18,89 @@ const router = Router();
  * /articles:
  *   get:
  *     summary: Get all articles
- *     description: Returns a list of all articles including their category and submitter information.
+ *     description: >
+ *       Returns a paginated list of news articles including category and submitter information.
+ *       Results are ordered by article ID in ascending order.
  *     tags:
  *       - Articles
+ *     parameters:
+ *       - in: query
+ *         name: page
+ *         schema:
+ *           type: integer
+ *           minimum: 1
+ *           example: 1
+ *         description: Page number for pagination (default is 1)
+ *       - in: query
+ *         name: limit
+ *         schema:
+ *           type: integer
+ *           minimum: 1
+ *           example: 10
+ *         description: Number of articles per page (default is 10)
  *     responses:
  *       200:
- *         description: Array of articles
+ *         description: Paginated list of articles
  *         content:
  *           application/json:
  *             schema:
  *               type: array
  *               items:
  *                 type: object
+ *                 required:
+ *                   - id
+ *                   - title
+ *                   - body
+ *                   - category_id
+ *                   - category_name
+ *                   - submitter_id
+ *                   - submitter_name
+ *                   - created_at
  *                 properties:
  *                   id:
- *                     type: number
+ *                     type: integer
+ *                     example: 1
  *                   title:
  *                     type: string
+ *                     example: Breaking News
  *                   body:
  *                     type: string
+ *                     example: This is the article content.
  *                   category_id:
- *                     type: number
+ *                     type: integer
+ *                     example: 2
  *                   category_name:
  *                     type: string
+ *                     example: Technology
  *                   submitter_id:
- *                     type: number
+ *                     type: integer
+ *                     example: 5
  *                   submitter_name:
  *                     type: string
+ *                     example: johndoe
  *                   created_at:
  *                     type: string
+ *                     format: date-time
+ *                     example: 2024-03-01T12:34:56Z
  *       500:
  *         description: Internal server error
  *         content:
  *           application/json:
  *             schema:
  *               type: object
+ *               required:
+ *                 - error
  *               properties:
  *                 error:
  *                   type: string
+ *                   example: Internal server error
  */
 
 router.get("/articles", async (req, res, next) => {
   try {
-    const [rows] = await pool.execute(`
+    const { limit, offset } = getPagination(req);
+    const [rows] = await pool.execute(
+      `
       SELECT 
         articles.id,
         articles.title,
@@ -71,12 +112,14 @@ router.get("/articles", async (req, res, next) => {
         articles.created_at
       FROM articles
       INNER JOIN categories ON articles.category_id = categories.id
-      INNER JOIN users ON articles.submitter_id = users.id;
-     `);
+      INNER JOIN users ON articles.submitter_id = users.id
+      ORDER BY articles.id ASC
+      LIMIT ? OFFSET ?
+      `,
+      [limit.toString(), offset.toString()],
+    );
 
-    const articles = rows as ArticleWithNames[];
-
-    res.json(articles);
+    res.json(rows as ArticleWithNames[]);
   } catch (error) {
     next(error);
   }
