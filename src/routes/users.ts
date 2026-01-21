@@ -11,7 +11,38 @@ import { authenticateToken } from "../middleware/validation.ts/auth.js";
 
 const router = Router();
 
-//GET /users
+/**
+ * @swagger
+ * /users:
+ *   get:
+ *     summary: Get all users
+ *     description: Returns a list of all users with their ID, username, and email.
+ *     responses:
+ *       200:
+ *         description: Array of users
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 type: object
+ *                 properties:
+ *                   id:
+ *                     type: number
+ *                   username:
+ *                     type: string
+ *                   email:
+ *                     type: string
+ *       500:
+ *         description: Internal server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ */
 
 router.get("/users", async (req, res, next) => {
   try {
@@ -23,7 +54,36 @@ router.get("/users", async (req, res, next) => {
   }
 });
 
-//GET /users/:id
+/**
+ * @swagger
+ * /users/{id}:
+ *   get:
+ *     summary: Get a single user by ID
+ *     description: Returns the user identified by the given ID.
+ *     parameters:
+ *       - name: id
+ *         in: path
+ *         required: true
+ *         description: The ID of the user to retrieve
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: User object
+ *       400:
+ *         description: Invalid user ID
+ *       404:
+ *         description: User not found
+ *       500:
+ *         description: Internal server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ */
 
 router.get("/users/:id", validateId("User ID"), async (req, res, next) => {
   try {
@@ -46,7 +106,34 @@ router.get("/users/:id", validateId("User ID"), async (req, res, next) => {
   }
 });
 
-//GET /users/:id/comments
+/**
+ * @swagger
+ * /users/{id}/comments:
+ *   get:
+ *     summary: Get all comments by a user
+ *     description: Returns all comments submitted by the specified user.
+ *     parameters:
+ *       - name: id
+ *         in: path
+ *         required: true
+ *         description: The ID of the user
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Array of comments
+ *       400:
+ *         description: Invalid user ID
+ *       500:
+ *         description: Internal server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ */
 
 router.get(
   "/users/:id/comments",
@@ -75,7 +162,34 @@ router.get(
   },
 );
 
-//GET /users/:id/articles
+/**
+ * @swagger
+ * /users/{id}/articles:
+ *   get:
+ *     summary: Get all articles by a user
+ *     description: Returns all articles submitted by the specified user.
+ *     parameters:
+ *       - name: id
+ *         in: path
+ *         required: true
+ *         description: The ID of the user
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Array of articles
+ *       400:
+ *         description: Invalid user ID
+ *       500:
+ *         description: Internal server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ */
 
 router.get(
   "/users/:id/articles",
@@ -105,7 +219,54 @@ router.get(
   },
 );
 
-//PUT /users/:id
+/**
+ * @swagger
+ * /users/{id}:
+ *   put:
+ *     summary: Update a user
+ *     description: Replaces the user's username and email. Requires authentication and ownership.
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - name: id
+ *         in: path
+ *         required: true
+ *         description: The ID of the user to update
+ *         schema:
+ *           type: string
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - username
+ *               - email
+ *             properties:
+ *               username:
+ *                 type: string
+ *               email:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: User updated
+ *       401:
+ *         description: Missing or invalid access token
+ *       403:
+ *         description: You can only edit your own user
+ *       404:
+ *         description: User not found
+ *       500:
+ *         description: Internal server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ */
 
 router.put(
   "/users/:id",
@@ -140,7 +301,53 @@ router.put(
   },
 );
 
-//PATCH /users/:id
+/**
+ * @swagger
+ * /users/{id}:
+ *   patch:
+ *     summary: Partially update a user
+ *     description: Updates one or more fields (username or email) of the user. Requires authentication and ownership.
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - name: id
+ *         in: path
+ *         required: true
+ *         description: The ID of the user to update
+ *         schema:
+ *           type: string
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               username:
+ *                 type: string
+ *                 description: Optional new username
+ *               email:
+ *                 type: string
+ *                 description: Optional new email
+ *     responses:
+ *       200:
+ *         description: User updated
+ *       401:
+ *         description: Missing or invalid access token
+ *       403:
+ *         description: You can only edit your own user
+ *       404:
+ *         description: User not found
+ *       500:
+ *         description: Internal server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ */
 
 router.patch(
   "/users/:id",
@@ -195,7 +402,40 @@ router.patch(
   },
 );
 
-//DELETE /users/:id
+/**
+ * @swagger
+ * /users/{id}:
+ *   delete:
+ *     summary: Delete a user
+ *     description: Deletes the user with the specified ID. Requires authentication and ownership.
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - name: id
+ *         in: path
+ *         required: true
+ *         description: The ID of the user to delete
+ *         schema:
+ *           type: string
+ *     responses:
+ *       204:
+ *         description: User deleted
+ *       401:
+ *         description: Missing or invalid access token
+ *       403:
+ *         description: You can only delete your own user
+ *       404:
+ *         description: User not found
+ *       500:
+ *         description: Internal server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ */
 
 router.delete(
   "/users/:id",
