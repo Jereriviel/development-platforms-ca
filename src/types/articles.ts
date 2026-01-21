@@ -4,7 +4,6 @@ export interface Article {
   body: string;
   category_id: number;
   submitter_id: number;
-  created_at: string;
 }
 
 export interface ArticleWithNames extends Article {

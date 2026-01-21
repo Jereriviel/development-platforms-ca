@@ -69,7 +69,7 @@ router.get(
       const articles = rows as ArticleWithNames[];
 
       if (articles.length === 0) {
-        return next({ status: 404, message: "article not found" });
+        return next({ status: 404, message: "Article not found" });
       }
 
       const article = articles[0];
@@ -124,6 +124,17 @@ router.post(
     try {
       const submitterId = req.user!.id;
       const { title, body, category_id } = req.body;
+      const [categoryRows] = await pool.execute(
+        "SELECT id FROM categories WHERE id = ?",
+        [category_id],
+      );
+
+      if ((categoryRows as any[]).length === 0) {
+        return res.status(404).json({
+          message: "Category not found",
+        });
+      }
+
       const [result]: [ResultSetHeader, any] = await pool.execute(
         "INSERT INTO articles (title, body, category_id, submitter_id) VALUES (?, ?, ?, ?)",
         [title, body, category_id, submitterId],
@@ -154,6 +165,17 @@ router.put(
       const articleId = Number(req.params.id);
       const submitterId = req.user!.id;
       const { title, body, category_id } = req.body;
+      const [categoryRows] = await pool.execute(
+        "SELECT id FROM categories WHERE id = ?",
+        [category_id],
+      );
+
+      if ((categoryRows as any[]).length === 0) {
+        return res.status(404).json({
+          message: "Category not found",
+        });
+      }
+
       const [result]: [ResultSetHeader, any] = await pool.execute(
         "UPDATE articles SET title = ?, body = ?, category_id = ? WHERE id = ? AND submitter_id = ?",
         [title, body, category_id, articleId, submitterId],
@@ -203,7 +225,18 @@ router.patch(
         values.push(body);
       }
 
-      if (category_id) {
+      if (category_id !== undefined) {
+        const [categoryRows] = await pool.execute(
+          "SELECT id FROM categories WHERE id = ?",
+          [category_id],
+        );
+
+        if ((categoryRows as any[]).length === 0) {
+          return res.status(404).json({
+            message: "Category not found",
+          });
+        }
+
         fieldsToUpdate.push("category_id = ?");
         values.push(category_id);
       }
