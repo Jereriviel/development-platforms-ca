@@ -104,3 +104,12 @@ Learning how APIs are built and how the different parts fit together has been ve
 The most challenging part of the project was figuring out how to properly relate the data to each other in a clear and logical way, as well as implementing correct validation for the different operations.
 
 I believe the main benefit of developing a custom API, compared to using a SaaS solution like Supabase, is having full control over your data and application logic without being limited by external platform constraints. I also think that having backend competence is valuable going forward, even as a frontend developer.
+
+## AI Usage
+
+AI tools were used in this assignment for:
+
+- Explaining concepts
+- Discussing coding best practices
+- Generating dummy data for users, categories, articles and comments
+- Assisting in writing JSDocs and Swagger documentation (reviewed and edited by me)
