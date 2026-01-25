@@ -2,7 +2,7 @@
 
 ## Description
 
-The goal of this project is to develop a functional news platform where users can browse and submit news articles with categories, and comments by implementing an Express.js REST API backend with authentication and database integration.
+The goal of this project is to develop a functional news platform where users can browse and submit news articles with categories and comments by implementing an Express.js REST API backend with authentication and database integration.
 
 ## Core Functionality
 
@@ -10,7 +10,7 @@ The goal of this project is to develop a functional news platform where users ca
 
 - Anyone can view the listings of categories, news articles, comments and users
 - List endpoints support pagination using page and limit query parameters (default: page=1, limit=10)
-- Articles can optionally be sorted using the sort query parameter: 'sort=category — sort by category' name and 'sort=author — sort by submitter name'
+- Articles can optionally be sorted using the sort query parameter: 'sort=category — sort by category name' and 'sort=author — sort by submitter name'
 
 ### User Authentication:
 
@@ -49,24 +49,24 @@ The goal of this project is to develop a functional news platform where users ca
 - Zod input validation
 - Dotenv for environment variables
 - CORS for cross-origin access
-- JSDocs
-- Swagger JSDocs
+- JSDocs for code documentation
+- Swagger for API documentation
 
 ## Installing
 
-1. Clone the repo:
+### 1. Clone the repo:
 
 ```bash
 git clone https://github.com/Jereriviel/development-platforms-ca.git
 ```
 
-2. Install dependencies
+### 2. Install dependencies:
 
 ```bash
 npm install
 ```
 
-3. Create a .env file (see .env.example for reference)
+### 3. Create a .env file (see .env.example for reference):
 
 ```bash
 DB_HOST=localhost
@@ -77,21 +77,26 @@ PORT=3000
 JWT_SECRET=your_jwt_secret
 ```
 
-4. Import the included SQL file (news-platform-database.sql) into MySQL Workbench.
+### 4. Import the included SQL file into MySQL Workbench:
 
-5. Start the local dev server:
+```bash
+ news-platform-database.sql
+```
+
+### 5. Start the local dev server:
 
 ```bash
 npm run dev
 ```
 
-6. You can view API documentation for all endpoints at
+### 6. API documentation:
 
 ```bash
 http://localhost:3000/api-docs/
 ```
 
-7. You can test the endpoints using Postman or a similar API client.
+### 7. Testing:
+You can use Postman or a similar API client to test the endpoints.
 
 ## Motivation
 
